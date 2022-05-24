@@ -37,6 +37,7 @@ async function run() {
     try {
         await client.connect();
         const toolsCollection = client.db('abctools').collection('tools');
+        const reviewCollection = client.db('abctools').collection('reviews');
 
         // JWT token
         app.post('/login', async (req, res) => {
@@ -51,6 +52,14 @@ async function run() {
         app.get('/tools', async (req, res) => {
             const query = {};
             const cursor = toolsCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        });
+
+        // API for get reviews
+        app.get('/reviews', async (req, res) => {
+            const query = {};
+            const cursor = reviewCollection.find(query);
             const result = await cursor.toArray();
             res.send(result);
         });
