@@ -128,7 +128,13 @@ async function run() {
             else {
                 return res.status(403).send({ message: 'Forbidden Access' });
             }
-        })
+        });
+
+        // Get Users API
+        app.get('/user', verifyToken, async (req, res) => {
+            const result = await userCollection.find().toArray();
+            res.send(result);
+        });
 
 
     } finally { }
