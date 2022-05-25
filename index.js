@@ -41,6 +41,20 @@ async function run() {
         const userCollection = client.db('abctools').collection('users');
         const orderCollection = client.db('abctools').collection('orders');
 
+        // API for create tools
+        app.post('/tools', async (req, res) => {
+            const newTools = req.body;
+            const result = await toolsCollection.insertOne(newTools);
+            res.send(result);
+        })
+
+        // API for delete tools
+        app.delete('/tools/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await toolsCollection.deleteOne(query);
+            res.send(result);
+        })
 
         // API for get tools
         app.get('/tools', async (req, res) => {
@@ -58,7 +72,7 @@ async function run() {
             res.send(result);
         });
 
-        // API for create order
+        // API for create review
         app.post('/reviews', async (req, res) => {
             const newReview = req.body;
             const result = await reviewCollection.insertOne(newReview);
@@ -124,7 +138,7 @@ async function run() {
         })
 
         // API for all order
-        app.get('/orders', async (req, res) => {
+        app.get('/orders', verifyToken, async (req, res) => {
             const query = {};
             const cursor = orderCollection.find(query);
             const result = await cursor.toArray();
