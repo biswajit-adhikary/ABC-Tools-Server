@@ -58,6 +58,13 @@ async function run() {
             res.send(result);
         });
 
+        // API for create order
+        app.post('/reviews', async (req, res) => {
+            const newReview = req.body;
+            const result = await reviewCollection.insertOne(newReview);
+            res.send(result);
+        })
+
         // API for get reviews
         app.get('/reviews', async (req, res) => {
             const query = {};
