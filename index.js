@@ -216,12 +216,27 @@ async function run() {
             const updateDoc = {
                 $set: {
                     paid: true,
+                    status: "Pending",
                     transactionId: payment.transactionId,
                 }
             }
             const updateOrder = await orderCollection.updateOne(query, updateDoc);
             const updateTransaction = await paymentCollection.insertOne(payment);
             res.send(updateDoc);
+        });
+
+
+        // Update Order Status
+        app.put('/dashboard/order/:id', verifyToken, async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const updateDoc = {
+                $set: {
+                    status: "Shipped",
+                }
+            }
+            const result = await orderCollection.updateOne(query, updateDoc);
+            res.send(result);
         });
 
 
