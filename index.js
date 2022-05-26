@@ -170,6 +170,14 @@ async function run() {
             }
         });
 
+        // API for delete order
+        app.delete('/orders/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await orderCollection.deleteOne(query);
+            res.send(result);
+        })
+
         // Get Users API
         app.get('/user', verifyToken, async (req, res) => {
             const result = await userCollection.find().toArray();
